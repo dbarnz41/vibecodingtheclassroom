@@ -562,14 +562,29 @@ hr.section-rule {
   padding: 0.6rem 1rem;
   background: rgba(255,255,255,0.04);
   border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
 }
+.code-block-header:hover { background: rgba(255,255,255,0.07); }
 .code-block-label {
   font-family: 'DM Mono', monospace;
   font-size: 0.6rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--mustard);
+  flex: 1;
 }
+.code-block-chevron {
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.3);
+  margin-right: 0.6rem;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.code-block.open .code-block-chevron { transform: rotate(180deg); }
+.code-block.open .code-block-header { border-bottom-color: rgba(255,255,255,0.06); }
+.code-block:not(.open) .code-block-header { border-bottom: none; }
 .copy-btn {
   font-family: 'DM Mono', monospace;
   font-size: 0.6rem;
@@ -582,6 +597,7 @@ hr.section-rule {
   color: rgba(255,255,255,0.5);
   cursor: pointer;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 .copy-btn:hover { background: rgba(255,255,255,0.08); color: var(--paper); }
 .copy-btn.copied { background: rgba(6,165,158,0.2); color: var(--teal); border-color: var(--teal); }
@@ -592,7 +608,9 @@ hr.section-rule {
   color: #c8bfa8;
   white-space: pre-wrap;
   word-break: break-word;
+  display: none;
 }
+.code-block.open .code-block-body { display: block; }
 .code-block-body .hi-p { color: #FF5B3D; }
 .code-block-body .hi-i { color: #F2B134; }
 .code-block-body .hi-c { color: #06A59E; }
@@ -3188,17 +3206,17 @@ render();
         <div class="pice-deep-body">
           <p>The persona is the single most impactful line of your prompt. It changes the tone, vocabulary, authority level, and creativity of everything that follows. Without it, the AI defaults to a generic assistant voice — technically accurate but lifeless.</p>
           <p><strong>Tip:</strong> You can reference a real voice. "Write this like David Attenborough narrating a nature documentary" will produce different results to "You are a gritty crime noir author." Both are valid — the key is intentionality.</p>
-          <div class="code-block">
-            <div class="code-block-header">
+          <div class="code-block open">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">Adventure game example</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body">You are a gritty narrator writing a choose-your-own-adventure game for Year 11 Biology students, set in a fossil excavation in the Australian outback. Your tone is tense, cinematic, and occasionally darkly funny.</div>
           </div>
-          <div class="code-block">
-            <div class="code-block-header">
+          <div class="code-block open">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">SAC feedback example</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body">You are an experienced VCE examiner who gives honest, specific, and constructive feedback. You speak directly to the student, not about them. You never use vague filler phrases like "good effort."</div>
           </div>
@@ -3215,10 +3233,10 @@ render();
         <div class="pice-deep-body">
           <p>This is where you spell out the mechanics. Number the steps. Use "exactly," "always," "never" when you have specific requirements. Don't leave room for interpretation where you don't want it.</p>
           <p><strong>Rule of thumb:</strong> If a substitute teacher couldn't follow your instructions alone, neither can the AI.</p>
-          <div class="code-block">
-            <div class="code-block-header">
+          <div class="code-block open">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">Adventure game example</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body">1. Write exactly 5 scenes with 3 choices each.
 2. Each scene = scene title + 2-3 sentences of situation + choices A, B, C.
@@ -3239,10 +3257,10 @@ render();
         <div class="pice-deep-body">
           <p>The AI has no idea what your classroom looks like, who your students are, or what's going on this term. You have to tell it. The more specific your context, the more tailored the output.</p>
           <p><strong>Don't forget:</strong> The "vibe" of the lesson is valid context. "Friday period 6 energy" will change the tone of output in ways that matter.</p>
-          <div class="code-block">
-            <div class="code-block-header">
+          <div class="code-block open">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">Context example</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body">Year 11 Biology, Unit 3 AOS 1 — cellular respiration. 30 students, mixed ability. Need to cover aerobic and anaerobic pathways. Game should take 15 minutes to play. Needs to be fun — Friday period 6 energy. Students respond well to humour and competition.</div>
           </div>
@@ -3259,10 +3277,10 @@ render();
         <div class="pice-deep-body">
           <p>This is the secret weapon most teachers skip. One concrete example beats 100 words of description. Show the AI the exact format, structure, and style you want — it will replicate it precisely.</p>
           <p><strong>Pro tip:</strong> If you have a real example of something you like — a past question, a colleague's resource — paste it in. Say "write in the style of this example."</p>
-          <div class="code-block">
-            <div class="code-block-header">
+          <div class="code-block open">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">Scene format example</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body">Format each scene exactly like this:
 
@@ -3291,10 +3309,10 @@ Points: A = -10, B = +15, C = +5</div>
         <div class="power-num">01</div>
         <h3>Meta-prompting</h3>
         <p class="tagline">Ask the AI to ask YOU questions first.</p>
-        <div class="code-block">
-          <div class="code-block-header">
+        <div class="code-block open">
+          <div class="code-block-header" onclick="toggleCodeBlock(this)">
             <span class="code-block-label">The move</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
           </div>
           <div class="code-block-body">Before you build anything, ask me 5 questions about my students, subject, and goals. Once I've answered, build the tool based on my answers.</div>
         </div>
@@ -3303,10 +3321,10 @@ Points: A = -10, B = +15, C = +5</div>
         <div class="power-num">02</div>
         <h3>Socratic prompting</h3>
         <p class="tagline">Make the AI question, not answer.</p>
-        <div class="code-block">
-          <div class="code-block-header">
+        <div class="code-block open">
+          <div class="code-block-header" onclick="toggleCodeBlock(this)">
             <span class="code-block-label">The move</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
           </div>
           <div class="code-block-body">Don't give the student the answer directly. Instead, ask them 3 guiding questions that help them reach the answer themselves. Only confirm or correct after their third attempt.</div>
         </div>
@@ -3510,9 +3528,9 @@ Format each [item] exactly like this:
     <p class="section-intro">You already built a game you like. Use this master prompt to turn it into a Gem system prompt automatically.</p>
 
     <div class="code-block" style="margin-bottom:1.5rem">
-      <div class="code-block-header">
+      <div class="code-block-header" onclick="toggleCodeBlock(this)">
         <span class="code-block-label">The Master Prompt — paste into Gemini after your first build</span>
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
       </div>
       <div class="code-block-body">I just built a choose-your-own-adventure game with you. Now I want to turn it into a reusable Gem I can use every week for different topics.
 
@@ -3532,10 +3550,10 @@ Keep it under 200 words. Use placeholders like [TOPIC] and [YEAR LEVEL] where th
       <p class="mp-desc">These work for any type of Gem — gameshow, SAC feedback, differentiation engine, Socratic tutor. Swap the tool name.</p>
 
       <div style="display:flex;flex-direction:column;gap:1rem">
-        <div class="code-block">
-          <div class="code-block-header">
+        <div class="code-block open">
+          <div class="code-block-header" onclick="toggleCodeBlock(this)">
             <span class="code-block-label">Prompt 1 · Build from scratch</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
           </div>
           <div class="code-block-body">You are an expert in building Gemini Gems for classroom teachers. I want to create a Gem that generates [TYPE OF TOOL] from uploaded content.
 
@@ -3544,10 +3562,10 @@ Before you write the system prompt, ask me 5 clarifying questions about: the stu
 Once I answer, write a complete Gem system prompt under 200 words.</div>
         </div>
 
-        <div class="code-block">
-          <div class="code-block-header">
+        <div class="code-block open">
+          <div class="code-block-header" onclick="toggleCodeBlock(this)">
             <span class="code-block-label">Prompt 2 · Adapt your existing prompt</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
           </div>
           <div class="code-block-body">Here is a prompt I've been using:
 [PASTE YOUR EXISTING PICE PROMPT]
@@ -3559,10 +3577,10 @@ Rewrite this as a Gemini Gem system prompt. It should:
 — Keep my tone and style intact</div>
         </div>
 
-        <div class="code-block">
-          <div class="code-block-header">
+        <div class="code-block open">
+          <div class="code-block-header" onclick="toggleCodeBlock(this)">
             <span class="code-block-label">Prompt 3 · Audit your Gem's output</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
           </div>
           <div class="code-block-body">Look at the output you just generated. Now check it against the rules in my system prompt.
 
@@ -3636,9 +3654,9 @@ List any rules you broke and rewrite those sections to fix them.</div>
         <div class="resource-body">
           <p>The choose-your-own-adventure game that opened the session. Characters, stat tracking, branching narrative, scoring. Built with a single PICE prompt. The source code is the proof of concept.</p>
           <div class="code-block">
-            <div class="code-block-header">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">Original PICE prompt that built this</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body"><span class="hi-p">You are a gritty, darkly funny game designer building a text-based choose-your-own-adventure for secondary school teachers at a professional development conference.</span>
 
@@ -3678,9 +3696,9 @@ C) [choice] → [stat changes]</span></div>
         <div class="resource-body">
           <p>Paste this into the Instructions field of a new Gemini Gem. Then upload any class notes, topic summary, or study guide and type "Make a game from this content." Works for any subject or year level.</p>
           <div class="code-block">
-            <div class="code-block-header">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">Gem system prompt — paste into Gemini Gems</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body">You are an engaging narrator who builds choose-your-own-adventure classroom games from teacher-uploaded content.
 
@@ -3719,9 +3737,9 @@ TONE: Tense, cinematic, appropriate for [YEAR LEVEL] students. Never dry or text
         <div class="resource-body">
           <p>The reusable gameshow Gem. Upload any content, get a fully formatted quiz with three rounds, lifelines, and a complete answer key. Runs in any classroom, no tech required beyond the output text.</p>
           <div class="code-block">
-            <div class="code-block-header">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">Gem system prompt</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body">You are "The Host" — an enthusiastic, exacting gameshow producer who creates classroom quiz games for VCE students.
 
@@ -3746,41 +3764,1824 @@ TONE: Dramatic. Fun. Gameshow host energy throughout. Never boring. Open each ro
         </div>
       </div>
 
-      <!-- RESOURCE 4: SAC Feedback Gem -->
-      <div class="resource-card" data-type="gem">
+      <!-- RESOURCE 4: Millionaire Game -->
+      <div class="resource-card" data-type="game">
         <div class="resource-card-header">
-          <div class="resource-icon" style="background:#EFF6FF">📝</div>
+          <div class="resource-icon" style="background:#1a0f3a">🎰</div>
           <div class="resource-card-header-text">
-            <h3>SAC Feedback Gem</h3>
-            <p>Consistent, rubric-aligned feedback on student responses</p>
+            <h3>Who Wants to Be a Millionaire?</h3>
+            <p>An AI-generated quiz game — 15 progressive questions, lifelines, prize ladder</p>
           </div>
           <div class="resource-tags">
-            <span class="resource-tag">gem</span>
-            <span class="resource-tag">assessment</span>
+            <span class="resource-tag">game</span>
+            <span class="resource-tag">html</span>
+            <span class="resource-tag">any subject</span>
           </div>
         </div>
         <div class="resource-body">
-          <p>Paste your school's rubric language into the Gem once. Then upload individual student responses and get structured, consistent feedback that matches your marking criteria — every time.</p>
-          <div class="code-block">
-            <div class="code-block-header">
-              <span class="code-block-label">Gem system prompt</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <p>A fully playable "Who Wants to Be a Millionaire?" game built from a PICE prompt. This version covers VCE HHD Unit 2 AOS 4 — Morbidity. The same prompt generates a new game for any topic in minutes. Includes 50:50, Ask the Audience, and Phone a Friend lifelines, a prize ladder with safe havens, and a high score board.</p>
+
+          <!-- EMBEDDED GAME -->
+          <div style="border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin:0 0 1.5rem">
+            <div style="background:var(--ink);padding:0.6rem 1rem;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mustard)">Live demo · Section 2.4 Morbidity</span>
+              <span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:#4B5563">Click to play</span>
             </div>
-            <div class="code-block-body">You are an experienced VCE teacher who gives honest, specific, and constructive feedback on student SAC responses.
+            <iframe
+              srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+    <meta charset=&quot;UTF-8&quot;>
+    <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+    <title>Section 2.4: Morbidity (including incidence and prevalence) - Who Wants to Be a Millionaire</title>
+    <style>
+        :root {
+            --dark-blue: #0f0c29;
+            --purple: #302b63;
+            --lighter-purple: #24243e;
+            --gold: #f1c40f;
+            --gold-hover: #d4ac0d;
+            --correct: #27ae60;
+            --wrong: #c0392b;
+            --selected: #d35400;
+            --text-color: #ecf0f1;
+        }
 
-When a teacher pastes a student response, provide structured feedback using this format:
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-STRENGTHS (2-3 specific things done well, quote the student's own words)
-GAPS (2-3 specific areas to improve, be precise not vague)
-NEXT STEP (1 concrete, actionable thing the student should do before the next draft)
-OVERALL: [High / Sound / Developing] — with a 1-sentence rationale
+        body {
+            background: linear-gradient(to bottom, var(--dark-blue), var(--purple));
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
 
-RULES:
-— Never use vague praise like "good effort" or "well done"
-— Always speak directly to the student, not about them
-— Reference specific evidence from the response
-— Keep total feedback under 200 words
-— Do not assign a numerical score unless asked</div>
+        .screen {
+            width: 100%;
+            max-width: 1400px;
+            padding: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .active-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+            margin-bottom: 20px;
+        }
+
+        h2 { 
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            background: linear-gradient(to right, var(--gold), #ffed4e);
+            color: var(--dark-blue);
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 30px 0;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+
+        .high-scores-list {
+            margin-top: 30px;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .high-score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .game-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .game-layout {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 20px;
+            width: 100%;
+            align-items: start;
+        }
+
+        .main-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .question-box {
+            background: linear-gradient(to right, var(--lighter-purple), var(--purple));
+            border: 2px solid var(--text-color);
+            padding: 30px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .answer-btn {
+            background: var(--dark-blue);
+            border: 1px solid var(--text-color);
+            padding: 15px;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            position: relative;
+            outline: none;
+        }
+
+        .answer-btn:hover:not(.disabled) {
+            background: var(--lighter-purple);
+            border-color: var(--gold);
+        }
+
+        .answer-prefix {
+            color: var(--gold);
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 25px;
+        }
+
+        .answer-btn.selected { 
+            background: var(--selected) !important; 
+            border-color: var(--selected) !important; 
+        }
+        
+        .answer-btn.correct { 
+            background: var(--correct) !important; 
+            border-color: var(--correct) !important; 
+            animation: pulse 0.5s; 
+        }
+        
+        .answer-btn.wrong { 
+            background: var(--wrong) !important; 
+            border-color: var(--wrong) !important; 
+        }
+        
+        .answer-btn.hidden { 
+            visibility: hidden; 
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .lifelines-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .lifeline-btn {
+            background: var(--gold);
+            color: var(--dark-blue);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lifeline-btn:hover:not(:disabled) {
+            background: var(--gold-hover);
+            transform: scale(1.05);
+        }
+
+        .lifeline-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .ladder-item {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .ladder-item.milestone {
+            border-color: var(--gold);
+            font-weight: bold;
+        }
+
+        .ladder-item.active {
+            background: var(--gold);
+            color: var(--dark-blue);
+            font-weight: bold;
+            border-color: var(--gold);
+        }
+
+        .ladder-item.completed {
+            opacity: 0.5;
+        }
+
+        #end-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        #end-message {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .initials-input {
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            border: 2px solid var(--gold);
+            background: var(--dark-blue);
+            color: white;
+            text-align: center;
+            width: 100px;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+
+        .end-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background: var(--purple);
+            color: white;
+            border: 2px solid var(--gold);
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: transform 0.2s;
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--purple);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid var(--gold);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .modal-close {
+            background: var(--gold);
+            color: var(--dark-blue);
+            border: none;
+            padding: 10px 30px;
+            margin-top: 20px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .audience-graph {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        .bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar {
+            width: 50px;
+            background: var(--gold);
+            border-radius: 5px 5px 0 0;
+            transition: height 1s ease;
+        }
+
+        .bar-label {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.3rem; }
+            
+            .game-layout { 
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar { 
+                order: -1;
+                position: static;
+            }
+            
+            .answers-grid { 
+                grid-template-columns: 1fr;
+            }
+            
+            .question-box { 
+                font-size: 1.1rem; 
+                padding: 20px;
+                min-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id=&quot;start-screen&quot; class=&quot;screen active-screen&quot;>
+        <h1>Who Wants to Be a Millionaire?</h1>
+        <p class=&quot;subtitle&quot;>Section 2.4: Morbidity (including incidence and prevalence)</p>
+        <p style=&quot;max-width: 600px; margin: 20px auto; line-height: 1.6;&quot;>
+            Test your knowledge about morbidity, incidence and prevalence as health status indicators.
+            Questions progress from basic definitions to complex analysis of health data and trends.
+        </p>
+        <button class=&quot;start-btn&quot; onclick=&quot;game.startGame()&quot;>START GAME</button>
+        <div class=&quot;high-scores-list&quot;>
+            <h3 style=&quot;color: var(--gold); margin-bottom: 15px;&quot;>🏆 High Scores</h3>
+            <div id=&quot;high-score-container&quot;></div>
+        </div>
+    </div>
+
+    <div id=&quot;game-screen&quot; class=&quot;screen&quot;>
+        <div class=&quot;game-header&quot;>
+            <h2 id=&quot;current-money&quot;>$0</h2>
+            <h2 id=&quot;question-number&quot;>Question 1 of 15</h2>
+        </div>
+        <div class=&quot;game-layout&quot;>
+            <div class=&quot;main-area&quot;>
+                <div class=&quot;question-box&quot; id=&quot;question-text&quot;>Question will appear here</div>
+                <div class=&quot;answers-grid&quot; id=&quot;answers-container&quot;></div>
+                <div class=&quot;lifelines-container&quot;>
+                    <button class=&quot;lifeline-btn&quot; id=&quot;ll-5050&quot; onclick=&quot;game.useLifeline('5050')&quot;>50:50</button>
+                    <button class=&quot;lifeline-btn&quot; id=&quot;ll-audience&quot; onclick=&quot;game.useLifeline('audience')&quot;>👥 Ask Audience</button>
+                    <button class=&quot;lifeline-btn&quot; id=&quot;ll-phone&quot; onclick=&quot;game.useLifeline('phone')&quot;>📞 Phone Friend</button>
+                </div>
+            </div>
+            <div class=&quot;sidebar&quot; id=&quot;prize-ladder&quot;></div>
+        </div>
+    </div>
+
+    <div id=&quot;end-screen&quot; class=&quot;screen&quot;>
+        <h1 id=&quot;end-title&quot;>GAME OVER</h1>
+        <p id=&quot;end-message&quot;>You won $0</p>
+        <input type=&quot;text&quot; class=&quot;initials-input&quot; id=&quot;initials&quot; placeholder=&quot;AAA&quot; maxlength=&quot;3&quot;>
+        <p style=&quot;font-size: 0.9rem; opacity: 0.7;&quot;>Enter your initials (3 letters)</p>
+        <div class=&quot;end-buttons&quot;>
+            <button class=&quot;start-btn&quot; onclick=&quot;game.saveAndExit()&quot;>Save &amp; Exit</button>
+            <button class=&quot;btn-secondary&quot; onclick=&quot;game.resetToMenu()&quot;>Exit</button>
+        </div>
+    </div>
+
+    <div id=&quot;modal&quot; class=&quot;modal&quot;>
+        <div class=&quot;modal-content&quot;>
+            <h2 id=&quot;modal-title&quot;>Lifeline</h2>
+            <div id=&quot;modal-body&quot;></div>
+            <button class=&quot;modal-close&quot; onclick=&quot;document.getElementById('modal').style.display='none'&quot;>Close</button>
+        </div>
+    </div>
+
+    <script>
+        const game = {
+            questions: [
+                { prize: 100, milestone: false },
+                { prize: 200, milestone: false },
+                { prize: 300, milestone: false },
+                { prize: 500, milestone: false },
+                { prize: 1000, milestone: true },
+                { prize: 2000, milestone: false },
+                { prize: 4000, milestone: false },
+                { prize: 8000, milestone: false },
+                { prize: 16000, milestone: false },
+                { prize: 32000, milestone: true },
+                { prize: 64000, milestone: false },
+                { prize: 125000, milestone: false },
+                { prize: 250000, milestone: false },
+                { prize: 500000, milestone: false },
+                { prize: 1000000, milestone: false }
+            ],
+
+            questionBank: {
+                // TIER 1: Q1-5 ($100-$1,000) - REMEMBER/UNDERSTAND
+                tier1: [
+                    {
+                        question: &quot;What does morbidity refer to?&quot;,
+                        answers: [&quot;Death in a population&quot;, &quot;Ill health in individuals or populations&quot;, &quot;Birth rates in a population&quot;, &quot;Recovery rates from disease&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;What does incidence measure?&quot;,
+                        answers: [&quot;Total cases of a disease&quot;, &quot;New cases during a period&quot;, &quot;Deaths from a disease&quot;, &quot;Recovery from a disease&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;What does prevalence measure?&quot;,
+                        answers: [&quot;New cases of disease only&quot;, &quot;Deaths from disease only&quot;, &quot;Total cases at a given time&quot;, &quot;Risk factors for disease&quot;],
+                        correct: 2
+                    },
+                    {
+                        question: &quot;How is morbidity commonly expressed?&quot;,
+                        answers: [&quot;Only in total numbers&quot;, &quot;Through incidence and prevalence&quot;, &quot;Only in mortality rates&quot;, &quot;Through life expectancy data&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;Which is the most commonly reported long-term condition in Australia?&quot;,
+                        answers: [&quot;Diabetes&quot;, &quot;Cancer&quot;, &quot;Long-sightedness&quot;, &quot;Heart disease&quot;],
+                        correct: 2
+                    },
+                    {
+                        question: &quot;What happens to morbidity rates as people live longer?&quot;,
+                        answers: [&quot;They always decrease&quot;, &quot;They often increase&quot;, &quot;They remain unchanged&quot;, &quot;They become irrelevant&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;What is a long-term health condition?&quot;,
+                        answers: [&quot;Any illness lasting one week&quot;, &quot;A condition lasting six months or more&quot;, &quot;Only terminal illnesses&quot;, &quot;Only infectious diseases&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;Which age group typically reports the highest rates of long-term conditions?&quot;,
+                        answers: [&quot;0-14 years&quot;, &quot;15-24 years&quot;, &quot;25-44 years&quot;, &quot;65+ years&quot;],
+                        correct: 3
+                    }
+                ],
+
+                // TIER 2: Q6-10 ($2,000-$32,000) - UNDERSTAND/APPLY
+                tier2: [
+                    {
+                        question: &quot;A disease has 100 new diagnoses and 400 total cases in a population. What does this indicate?&quot;,
+                        answers: [&quot;Incidence is 100, prevalence is 400&quot;, &quot;Incidence is 400, prevalence is 100&quot;, &quot;Both incidence and prevalence are 500&quot;, &quot;Incidence equals prevalence at 250&quot;],
+                        correct: 0
+                    },
+                    {
+                        question: &quot;Why have morbidity rates increased as mortality rates decreased?&quot;,
+                        answers: [&quot;More people are getting sick&quot;, &quot;People live longer with conditions&quot;, &quot;Medical treatments are worse&quot;, &quot;Health status is declining&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;According to the data, around what percentage of Australians experience a long-term health condition?&quot;,
+                        answers: [&quot;About 25%&quot;, &quot;About 50%&quot;, &quot;About 78%&quot;, &quot;About 95%&quot;],
+                        correct: 2
+                    },
+                    {
+                        question: &quot;Why do mental and behavioural problems rank highly in young age groups?&quot;,
+                        answers: [&quot;They only affect young people&quot;, &quot;They are more severe in youth&quot;, &quot;They are commonly reported in youth&quot;, &quot;They cause more deaths in youth&quot;],
+                        correct: 2
+                    },
+                    {
+                        question: &quot;For chronic conditions like cancer, why is prevalence data more useful than incidence alone?&quot;,
+                        answers: [&quot;Incidence is always inaccurate&quot;, &quot;Prevalence shows total healthcare burden&quot;, &quot;Incidence only measures deaths&quot;, &quot;Prevalence predicts future cases&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;What trend in overweight and obesity has emerged since 1995?&quot;,
+                        answers: [&quot;Rates have decreased significantly&quot;, &quot;Rates have remained stable&quot;, &quot;Rates have increased significantly&quot;, &quot;Only children are affected&quot;],
+                        correct: 2
+                    },
+                    {
+                        question: &quot;Why do vision problems rank so highly in morbidity statistics?&quot;,
+                        answers: [&quot;They cause many deaths&quot;, &quot;They are very common but non-fatal&quot;, &quot;They only affect older people&quot;, &quot;They are easily preventable&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;Type 2 diabetes prevalence has tripled in two decades. What does 'prevalence' tell us?&quot;,
+                        answers: [&quot;How many people died from it&quot;, &quot;Total people living with it now&quot;, &quot;How many will develop it&quot;, &quot;How many recovered from it&quot;],
+                        correct: 1
+                    }
+                ],
+
+                // TIER 3: Q11-13 ($64,000-$250,000) - APPLY/ANALYZE
+                tier3: [
+                    {
+                        question: &quot;Breast cancer incidence is up but death rates are down. What does this pattern suggest?&quot;,
+                        answers: [&quot;Breast cancer is becoming less common&quot;, &quot;Better detection and treatment exist&quot;, &quot;Breast cancer is becoming more deadly&quot;, &quot;Prevalence must be decreasing&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;Asthma has high prevalence but relatively low mortality. Why is this nationally significant?&quot;,
+                        answers: [&quot;It shows asthma is not important&quot;, &quot;High morbidity burden despite low deaths&quot;, &quot;Only mortality matters for policy&quot;, &quot;Prevalence data is inaccurate&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;The text states arthritis causes few deaths but has high prevalence. How does this affect health status measurement?&quot;,
+                        answers: [&quot;Arthritis doesn't impact health status&quot;, &quot;Morbidity data captures impact better&quot;, &quot;Only mortality data is reliable&quot;, &quot;Arthritis is not a health concern&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;Why do some conditions appear in morbidity statistics but not mortality statistics?&quot;,
+                        answers: [&quot;The data is always incorrect&quot;, &quot;They cause ill health but rarely death&quot;, &quot;They are not real health conditions&quot;, &quot;They only affect young people&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;Mental disorders rank high in 15-24 age group morbidity but lower in mortality. What does this indicate?&quot;,
+                        answers: [&quot;Mental health is not serious&quot;, &quot;High burden from illness, not death&quot;, &quot;Young people report inaccurately&quot;, &quot;Mental health causes most deaths&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;Obesity prevalence has increased significantly. Why might this affect future mortality and morbidity?&quot;,
+                        answers: [&quot;It won't affect future statistics&quot;, &quot;Obesity causes no health problems&quot;, &quot;Obesity increases risk of chronic diseases&quot;, &quot;Only current obesity matters&quot;],
+                        correct: 2
+                    }
+                ],
+
+                // TIER 4: Q14-15 ($500,000-$1,000,000) - EVALUATE/CREATE
+                tier4: [
+                    {
+                        question: &quot;Why is examining both incidence AND prevalence important for health policy?&quot;,
+                        answers: [&quot;They always show the same thing&quot;, &quot;They provide redundant information&quot;, &quot;Incidence shows new burden, prevalence shows total healthcare need&quot;, &quot;Only one statistic is needed&quot;],
+                        correct: 2
+                    },
+                    {
+                        question: &quot;A critic argues 'High morbidity but low mortality means a condition isn't important.' Evaluate this claim.&quot;,
+                        answers: [&quot;Correct - only deaths matter for health&quot;, &quot;Incorrect - quality of life matters greatly&quot;, &quot;Partially true - only fatal conditions matter&quot;, &quot;Correct - morbidity data is unreliable&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;The text shows different age groups have different leading conditions. Why is age-specific morbidity data valuable?&quot;,
+                        answers: [&quot;It's not valuable, overall data is better&quot;, &quot;It allows targeted interventions for each age group&quot;, &quot;It only creates confusion&quot;, &quot;Age doesn't affect health conditions&quot;],
+                        correct: 1
+                    },
+                    {
+                        question: &quot;Why might using mortality data alone give an incomplete picture of health status?&quot;,
+                        answers: [&quot;Mortality data is always wrong&quot;, &quot;Many conditions cause illness but not death&quot;, &quot;Mortality is the only true measure&quot;, &quot;Morbidity data is more important&quot;],
+                        correct: 1
+                    }
+                ]
+            },
+
+            currentLevel: 0,
+            money: 0,
+            lifelines: { '5050': true, audience: true, phone: true },
+            selectedQuestions: [],
+            currentShuffledAnswers: [],
+            isProcessing: false,
+
+            init: function() {
+                this.loadHighScores();
+                this.switchScreen('start-screen');
+            },
+
+            switchScreen: function(screenId) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+                document.getElementById(screenId).classList.add('active-screen');
+            },
+
+            startGame: function() {
+                this.currentLevel = 0;
+                this.money = 0;
+                this.lifelines = { '5050': true, audience: true, phone: true };
+                this.isProcessing = false;
+                
+                ['5050', 'audience', 'phone'].forEach(ll => {
+                    document.getElementById(`ll-${ll}`).disabled = false;
+                });
+
+                this.selectQuestionsFromTiers();
+                this.switchScreen('game-screen');
+                this.renderLadder();
+                this.loadQuestion();
+            },
+
+            selectQuestionsFromTiers: function() {
+                this.selectedQuestions = [];
+                
+                // Q1-5: Select from tier1
+                const tier1Pool = [...this.questionBank.tier1];
+                for (let i = 0; i < 5; i++) {
+                    if (tier1Pool.length > 0) {
+                        const idx = Math.floor(Math.random() * tier1Pool.length);
+                        this.selectedQuestions.push(tier1Pool[idx]);
+                        tier1Pool.splice(idx, 1);
+                    }
+                }
+                
+                // Q6-10: Select from tier2
+                const tier2Pool = [...this.questionBank.tier2];
+                for (let i = 0; i < 5; i++) {
+                    if (tier2Pool.length > 0) {
+                        const idx = Math.floor(Math.random() * tier2Pool.length);
+                        this.selectedQuestions.push(tier2Pool[idx]);
+                        tier2Pool.splice(idx, 1);
+                    }
+                }
+                
+                // Q11-13: Select from tier3
+                const tier3Pool = [...this.questionBank.tier3];
+                for (let i = 0; i < 3; i++) {
+                    if (tier3Pool.length > 0) {
+                        const idx = Math.floor(Math.random() * tier3Pool.length);
+                        this.selectedQuestions.push(tier3Pool[idx]);
+                        tier3Pool.splice(idx, 1);
+                    }
+                }
+                
+                // Q14-15: Select from tier4
+                const tier4Pool = [...this.questionBank.tier4];
+                for (let i = 0; i < 2; i++) {
+                    if (tier4Pool.length > 0) {
+                        const idx = Math.floor(Math.random() * tier4Pool.length);
+                        this.selectedQuestions.push(tier4Pool[idx]);
+                        tier4Pool.splice(idx, 1);
+                    }
+                }
+            },
+
+            renderLadder: function() {
+                const ladder = document.getElementById('prize-ladder');
+                ladder.innerHTML = '';
+                
+                for (let i = 14; i >= 0; i--) {
+                    const item = document.createElement('div');
+                    item.className = 'ladder-item';
+                    
+                    if (this.questions[i].milestone) item.classList.add('milestone');
+                    if (i === this.currentLevel) item.classList.add('active');
+                    else if (i < this.currentLevel) item.classList.add('completed');
+                    
+                    item.innerHTML = `<span>${i + 1}</span><span>$${this.questions[i].prize.toLocaleString()}</span>`;
+                    ladder.appendChild(item);
+                }
+            },
+
+            loadQuestion: function() {
+                if (this.currentLevel >= 15) {
+                    this.gameOver(true);
+                    return;
+                }
+
+                const data = this.selectedQuestions[this.currentLevel];
+                
+                document.getElementById('question-number').innerText = `Question ${this.currentLevel + 1} of 15`;
+                document.getElementById('current-money').innerText = this.currentLevel > 0 
+                    ? `$${this.questions[this.currentLevel - 1].prize.toLocaleString()}`
+                    : '$0';
+                document.getElementById('question-text').innerText = data.question;
+                
+                let answersWithMeta = data.answers.map((ans, i) => ({
+                    text: ans,
+                    isCorrect: i === data.correct
+                }));
+
+                for (let i = answersWithMeta.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [answersWithMeta[i], answersWithMeta[j]] = [answersWithMeta[j], answersWithMeta[i]];
+                }
+                
+                this.currentShuffledAnswers = answersWithMeta;
+
+                const answersContainer = document.getElementById('answers-container');
+                answersContainer.innerHTML = '';
+
+                const letters = ['A', 'B', 'C', 'D'];
+                this.currentShuffledAnswers.forEach((item, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'answer-btn';
+                    btn.id = `ans-${index}`;
+                    btn.innerHTML = `<span class=&quot;answer-prefix&quot;>${letters[index]}:</span> ${item.text}`;
+                    btn.onclick = () => this.selectAnswer(index);
+                    answersContainer.appendChild(btn);
+                });
+
+                this.renderLadder();
+            },
+
+            selectAnswer: function(index) {
+                if (this.isProcessing) return;
+                this.isProcessing = true;
+
+                const selectedBtn = document.getElementById(`ans-${index}`);
+                selectedBtn.classList.add('selected');
+
+                setTimeout(() => {
+                    const chosenAnswer = this.currentShuffledAnswers[index];
+                    const prize = this.questions[this.currentLevel].prize;
+
+                    if (chosenAnswer.isCorrect) {
+                        selectedBtn.classList.remove('selected');
+                        selectedBtn.classList.add('correct');
+                        this.money = prize;
+                        
+                        setTimeout(() => {
+                            this.currentLevel++;
+                            this.isProcessing = false;
+                            this.loadQuestion();
+                        }, 1500);
+                    } else {
+                        selectedBtn.classList.remove('selected');
+                        selectedBtn.classList.add('wrong');
+                        
+                        const correctBtnIndex = this.currentShuffledAnswers.findIndex(a => a.isCorrect);
+                        const correctBtn = document.getElementById(`ans-${correctBtnIndex}`);
+                        if(correctBtn) correctBtn.classList.add('correct');
+                        
+                        let lastMilestone = 0;
+                        for (let i = this.currentLevel - 1; i >= 0; i--) {
+                            if (this.questions[i].milestone) {
+                                lastMilestone = this.questions[i].prize;
+                                break;
+                            }
+                        }
+                        this.money = lastMilestone;
+                        
+                        setTimeout(() => {
+                            this.gameOver(false);
+                        }, 2000);
+                    }
+                }, 2000);
+            },
+
+            useLifeline: function(type) {
+                if (!this.lifelines[type] || this.isProcessing) return;
+                
+                this.lifelines[type] = false;
+                document.getElementById(`ll-${type}`).disabled = true;
+
+                const correctBtnIndex = this.currentShuffledAnswers.findIndex(a => a.isCorrect);
+
+                if (type === '5050') {
+                    const wrongIndices = [0,1,2,3].filter(i => i !== correctBtnIndex);
+                    wrongIndices.sort(() => Math.random() - 0.5);
+                    const btn1 = document.getElementById(`ans-${wrongIndices[0]}`);
+                    const btn2 = document.getElementById(`ans-${wrongIndices[1]}`);
+                    if(btn1) btn1.classList.add('hidden');
+                    if(btn2) btn2.classList.add('hidden');
+                } else if (type === 'audience') {
+                    this.showAudienceModal(correctBtnIndex);
+                } else if (type === 'phone') {
+                    this.showPhoneModal(correctBtnIndex);
+                }
+            },
+
+            showAudienceModal: function(correctIdx) {
+                let percentages = [0,0,0,0];
+                
+                const questionDifficulty = this.currentLevel / 15;
+                const baseConfidence = 75 - (questionDifficulty * 25);
+                const correctVal = Math.floor(Math.random() * 20) + baseConfidence;
+                percentages[correctIdx] = correctVal;
+                
+                let remaining = 100 - correctVal;
+                for(let i=0; i<4; i++) {
+                    if (i !== correctIdx &amp;&amp; remaining > 0) {
+                        let val = Math.floor(Math.random() * (remaining / 2));
+                        percentages[i] = val;
+                        remaining -= val;
+                    }
+                }
+                
+                percentages[correctIdx] += remaining;
+
+                let html = '<div class=&quot;audience-graph&quot;>';
+                ['A','B','C','D'].forEach((l, i) => {
+                    html += `
+                        <div class=&quot;bar-container&quot;>
+                            <div class=&quot;bar&quot; style=&quot;height: ${percentages[i] * 2}px&quot;></div>
+                            <div class=&quot;bar-label&quot;>${l}<br>${percentages[i]}%</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                this.showModal('Ask the Audience', html);
+            },
+
+            showPhoneModal: function(correctIdx) {
+                const questionDifficulty = this.currentLevel / 15;
+                const helpfulChance = 0.85 - (questionDifficulty * 0.25);
+                
+                const isHelpful = Math.random() < helpfulChance;
+                let suggested = correctIdx;
+                
+                if (!isHelpful) {
+                    const wrong = [0,1,2,3].filter(i => i !== correctIdx);
+                    suggested = wrong[Math.floor(Math.random() * wrong.length)];
+                }
+
+                const letters = ['A','B','C','D'];
+                const confidence = isHelpful ? 
+                    ['pretty sure', 'fairly confident', 'quite certain'][Math.floor(Math.random() * 3)] :
+                    ['I think', 'maybe', 'possibly'][Math.floor(Math.random() * 3)];
+                
+                const text = `I'm ${confidence} the answer is ${letters[suggested]}.`;
+                this.showModal('Phone a Friend', `<p style=&quot;font-size:1.2rem; margin:20px 0;&quot;>&quot;${text}&quot;</p>`);
+            },
+
+            showModal: function(title, content) {
+                document.getElementById('modal-title').innerText = title;
+                document.getElementById('modal-body').innerHTML = content;
+                document.getElementById('modal').style.display = 'flex';
+            },
+
+            gameOver: function(won) {
+                this.isProcessing = false;
+                this.switchScreen('end-screen');
+                const title = won ? &quot;🎉 MILLIONAIRE! 🎉&quot; : &quot;GAME OVER&quot;;
+                const msg = `You walked away with $${this.money.toLocaleString()}`;
+                document.getElementById('end-title').innerText = title;
+                document.getElementById('end-message').innerText = msg;
+                document.getElementById('end-title').style.color = won ? 'var(--correct)' : 'var(--wrong)';
+            },
+
+            saveAndExit: function() {
+                const initials = document.getElementById('initials').value.toUpperCase().trim();
+                if (!initials || initials.length !== 3) {
+                    alert(&quot;Please enter exactly 3 initials.&quot;);
+                    return;
+                }
+                
+                const scores = JSON.parse(localStorage.getItem('section24MorbidityScores')) || [];
+                scores.push({ 
+                    initials: initials, 
+                    score: this.money,
+                    date: new Date().toLocaleDateString()
+                });
+                
+                scores.sort((a,b) => b.score - a.score);
+                const top5 = scores.slice(0, 5);
+                
+                localStorage.setItem('section24MorbidityScores', JSON.stringify(top5));
+                this.resetToMenu();
+            },
+
+            resetToMenu: function() {
+                document.getElementById('initials').value = '';
+                this.loadHighScores();
+                this.switchScreen('start-screen');
+            },
+
+            loadHighScores: function() {
+                const container = document.getElementById('high-score-container');
+                const scores = JSON.parse(localStorage.getItem('section24MorbidityScores')) || [];
+                
+                if (scores.length === 0) {
+                    container.innerHTML = '<p style=&quot;opacity: 0.6;&quot;>No scores yet. Be the first!</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                scores.forEach((s, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'high-score-item';
+                    const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    row.innerHTML = `<span>${medal} ${s.initials}</span> <span>$${s.score.toLocaleString()}</span>`;
+                    container.appendChild(row);
+                });
+            }
+        };
+
+        window.onload = () => game.init();
+    </script>
+</body>
+</html>"
+              title="Who Wants to Be a Millionaire — HHD 2.4 Morbidity"
+              style="width:100%;height:520px;border:none;display:block;background:#0f0c29"
+              scrolling="yes"
+            ></iframe>
+          </div>
+
+          <!-- PROMPT -->
+          <div class="code-block">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
+              <span class="code-block-label">The PICE prompt that generates this game — adapt for any topic</span>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
+            </div>
+            <div class="code-block-body">Task: Generate a new "Who Wants to Be a Millionaire" game for Chapter 1.5 (HHD).
+Structural Constraints (MANDATORY):
+
+Mirror the Source: Use the exact HTML structure, CSS classes, and JavaScript logic from the provided 12 HHD 1.3 Millionaire - Claude.html file.
+Sidebar Layout: The progress ladder must remain in the right-hand sidebar (.game-layout with grid-template-columns: 1fr 250px).
+Triple Lifelines: Ensure all 3 lifelines are present and functional: 50:50, SKIP, and Phone-a-Friend (📞).
+Milestones: Maintain the "Safe Havens" at $1,000 and $32,000 in the handleAnswer logic and CSS.
+Content Requirements:
+
+Questions: Create 15 original multiple-choice questions based on Chapter 1.5
+Difficulty Curve: Questions should get progressively harder (Level 1-5: Basic terminology; Level 6-10: Application; Level 11-15: Complex VCE-style analysis).
+Storage Key: Update the localStorage key in the saveScore and loadHighScores functions to [INSERT UNIQUE KEY, e.g., hhd15_scores] to ensure high scores don't overwrite previous chapters.
+Title &amp; Header: Update the &lt;title&gt; and the &lt;h1&gt; tag to reflect the new chapter.
+Source File for Reference:
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Section 1.3: Dimensions of Health &amp; Wellbeing - Millionaire&lt;/title&gt;
+    &lt;style&gt;
+        :root {
+            --dark-blue: #0f0c29;
+            --purple: #302b63;
+            --lighter-purple: #24243e;
+            --gold: #f1c40f;
+            --gold-hover: #d4ac0d;
+            --correct: #27ae60;
+            --wrong: #c0392b;
+            --selected: #d35400;
+            --text-color: #ecf0f1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(to bottom, var(--dark-blue), var(--purple));
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .screen {
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .active-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+            margin-bottom: 20px;
+        }
+
+        h2 { margin-bottom: 20px; }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            background: linear-gradient(to right, var(--gold), #ffed4e);
+            color: var(--dark-blue);
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 30px 0;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+
+        .high-scores-list {
+            margin-top: 30px;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .high-score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .game-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 0 10px;
+        }
+
+        .game-layout {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .main-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .question-box {
+            background: linear-gradient(to right, var(--lighter-purple), var(--purple));
+            border: 2px solid var(--text-color);
+            padding: 30px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .answer-btn {
+            background: var(--dark-blue);
+            border: 1px solid var(--text-color);
+            padding: 15px;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            position: relative;
+            outline: none;
+        }
+
+        .answer-btn:hover:not(.disabled) {
+            background: var(--lighter-purple);
+            border-color: var(--gold);
+        }
+
+        .answer-prefix {
+            color: var(--gold);
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 25px;
+        }
+
+        .answer-btn.selected { background: var(--selected) !important; border-color: var(--selected) !important; }
+        .answer-btn.correct { background: var(--correct) !important; border-color: var(--correct) !important; animation: pulse 0.5s; }
+        .answer-btn.wrong { background: var(--wrong) !important; border-color: var(--wrong) !important; }
+        .answer-btn.hidden { visibility: hidden; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .lifelines-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .lifeline-btn {
+            background: var(--gold);
+            color: var(--dark-blue);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lifeline-btn:hover:not(:disabled) {
+            background: var(--gold-hover);
+            transform: scale(1.05);
+        }
+
+        .lifeline-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ladder-item {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            border: 1px solid transparent;
+        }
+
+        .ladder-item.milestone {
+            border-color: var(--gold);
+            font-weight: bold;
+        }
+
+        .ladder-item.active {
+            background: var(--gold);
+            color: var(--dark-blue);
+            font-weight: bold;
+        }
+
+        .ladder-item.completed {
+            opacity: 0.5;
+        }
+
+        #end-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        #end-message {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .initials-input {
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            border: 2px solid var(--gold);
+            background: var(--dark-blue);
+            color: white;
+            text-align: center;
+            width: 100px;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+
+        .end-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background: var(--purple);
+            color: white;
+            border: 2px solid var(--gold);
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: transform 0.2s;
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--purple);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid var(--gold);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .modal-close {
+            background: var(--gold);
+            color: var(--dark-blue);
+            border: none;
+            padding: 10px 30px;
+            margin-top: 20px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .audience-graph {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        .bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar {
+            width: 50px;
+            background: var(--gold);
+            border-radius: 5px 5px 0 0;
+            transition: height 1s ease;
+        }
+
+        .bar-label {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .game-layout { grid-template-columns: 1fr; }
+            .answers-grid { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+            .question-box { font-size: 1.1rem; padding: 20px; }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="start-screen" class="screen active-screen"&gt;
+        &lt;h1&gt;Who Wants to Be a Millionaire?&lt;/h1&gt;
+        &lt;p class="subtitle"&gt;Section 1.3: Dimensions of Health &amp; Wellbeing&lt;/p&gt;
+        &lt;p style="max-width: 600px; margin: 20px auto; line-height: 1.6;"&gt;
+            Test your knowledge with 15 progressively challenging questions about the five dimensions of health and wellbeing.
+            Questions build from basic recall to complex application and analysis.
+        &lt;/p&gt;
+        &lt;button class="start-btn" onclick="game.startGame()"&gt;START GAME&lt;/button&gt;
+        &lt;div class="high-scores-list"&gt;
+            &lt;h3 style="color: var(--gold); margin-bottom: 15px;"&gt;🏆 High Scores&lt;/h3&gt;
+            &lt;div id="high-score-container"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id="game-screen" class="screen"&gt;
+        &lt;div class="game-header"&gt;
+            &lt;h2 id="current-money"&gt;$0&lt;/h2&gt;
+            &lt;h3 id="question-number"&gt;Question 1 of 15&lt;/h3&gt;
+        &lt;/div&gt;
+        &lt;div class="game-layout"&gt;
+            &lt;div class="main-area"&gt;
+                &lt;div class="question-box" id="question-text"&gt;Question will appear here&lt;/div&gt;
+                &lt;div class="answers-grid" id="answers-container"&gt;&lt;/div&gt;
+                &lt;div class="lifelines-container"&gt;
+                    &lt;button class="lifeline-btn" id="ll-5050" onclick="game.useLifeline('5050')"&gt;50:50&lt;/button&gt;
+                    &lt;button class="lifeline-btn" id="ll-audience" onclick="game.useLifeline('audience')"&gt;👥 Ask Audience&lt;/button&gt;
+                    &lt;button class="lifeline-btn" id="ll-phone" onclick="game.useLifeline('phone')"&gt;📞 Phone Friend&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="sidebar" id="prize-ladder"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id="end-screen" class="screen"&gt;
+        &lt;h1 id="end-title"&gt;GAME OVER&lt;/h1&gt;
+        &lt;p id="end-message"&gt;You won $0&lt;/p&gt;
+        &lt;input type="text" class="initials-input" id="initials" placeholder="AAA" maxlength="3"&gt;
+        &lt;p style="font-size: 0.9rem; opacity: 0.7;"&gt;Enter your initials (3 letters)&lt;/p&gt;
+        &lt;div class="end-buttons"&gt;
+            &lt;button class="start-btn" onclick="game.saveAndExit()"&gt;Save &amp; Exit&lt;/button&gt;
+            &lt;button class="btn-secondary" onclick="game.resetToMenu()"&gt;Exit&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id="modal" class="modal"&gt;
+        &lt;div class="modal-content"&gt;
+            &lt;h2 id="modal-title"&gt;Lifeline&lt;/h2&gt;
+            &lt;div id="modal-body"&gt;&lt;/div&gt;
+            &lt;button class="modal-close" onclick="document.getElementById('modal').style.display='none'"&gt;Close&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        const game = {
+            questions: [
+                { prize: 100, milestone: false },
+                { prize: 200, milestone: false },
+                { prize: 300, milestone: false },
+                { prize: 500, milestone: false },
+                { prize: 1000, milestone: true },
+                { prize: 2000, milestone: false },
+                { prize: 4000, milestone: false },
+                { prize: 8000, milestone: false },
+                { prize: 16000, milestone: false },
+                { prize: 32000, milestone: true },
+                { prize: 64000, milestone: false },
+                { prize: 125000, milestone: false },
+                { prize: 250000, milestone: false },
+                { prize: 500000, milestone: false },
+                { prize: 1000000, milestone: false }
+            ],
+
+            // Progressive difficulty following Bloom's Taxonomy
+            // Answer lengths balanced, all plausible, common misconceptions included
+            questionBank: [
+                // Q1-5: REMEMBER/UNDERSTAND ($100-$1,000)
+                {
+                    question: "Which dimension relates to the state and functioning of body systems?",
+                    answers: ["Mental health", "Physical health", "Social health", "Emotional health"],
+                    correct: 1,
+                    bloom: "Remember"
+                },
+                {
+                    question: "Resilience is a key characteristic of which dimension?",
+                    answers: ["Physical health", "Emotional health", "Mental health", "Spiritual health"],
+                    correct: 1,
+                    bloom: "Remember"
+                },
+                {
+                    question: "Ideas, beliefs and values are characteristics of which dimension?",
+                    answers: ["Mental health", "Social health", "Emotional health", "Spiritual health"],
+                    correct: 3,
+                    bloom: "Remember"
+                },
+                {
+                    question: "Self-esteem is primarily a characteristic of which dimension?",
+                    answers: ["Physical health", "Mental health", "Emotional health", "Social health"],
+                    correct: 1,
+                    bloom: "Understand"
+                },
+                {
+                    question: "Adapting behaviour to different social situations relates to which dimension?",
+                    answers: ["Emotional health", "Mental health", "Social health", "Spiritual health"],
+                    correct: 2,
+                    bloom: "Understand"
+                },
+                
+                // Q6-10: UNDERSTAND/APPLY ($2,000-$32,000)
+                {
+                    question: "Anna cries during a sad movie and laughs at funny parts. Her friend Ben rarely shows emotion in public. Based on this information alone, who demonstrates optimal emotional health?",
+                    answers: ["Anna - she expresses emotions openly", "Ben - he controls his emotions better", "Cannot determine without more information", "Both demonstrate poor emotional health"],
+                    correct: 2,
+                    bloom: "Apply"
+                },
+                {
+                    question: "Jake thinks 'I'm hopeless at maths' after failing a test. He feels anxious and avoids studying. Which dimension is PRIMARILY affected first?",
+                    answers: ["Mental - thought patterns", "Emotional - anxiety feelings", "Physical - stress response", "Social - avoiding classmates"],
+                    correct: 0,
+                    bloom: "Apply"
+                },
+                {
+                    question: "Which scenario demonstrates optimal emotional health?",
+                    answers: ["Never experiencing negative emotions", "Feeling happy most of the time", "Recognising and managing all emotions appropriately", "Avoiding situations that cause sadness"],
+                    correct: 2,
+                    bloom: "Understand"
+                },
+                {
+                    question: "Maria meditates daily and feels connected to nature. Li attends church weekly and feels part of a community. Who demonstrates spiritual health?",
+                    answers: ["Only Maria - meditation is spiritual", "Only Li - religion is spiritual", "Both - spiritual health varies individually", "Neither - these are social activities"],
+                    correct: 2,
+                    bloom: "Apply"
+                },
+                {
+                    question: "Blood pressure, body weight and fitness levels are all characteristics of which dimension?",
+                    answers: ["Physical health only", "Mental and physical health", "All five dimensions", "Physical and emotional health"],
+                    correct: 0,
+                    bloom: "Understand"
+                },
+                
+                // Q11-13: APPLY/ANALYZE ($64,000-$250,000)
+                {
+                    question: "Sam says 'I feel stressed' (mental). Their friend asks 'What emotion are you experiencing?' Sam says 'I don't know, just stressed.' What does this reveal about the mental-emotional distinction?",
+                    answers: ["Sam has poor mental health", "Sam has poor emotional health", "Stress is a mental state; identifying emotions is emotional health", "There is no real distinction"],
+                    correct: 2,
+                    bloom: "Analyze"
+                },
+                {
+                    question: "A study finds people with strong spiritual health recover faster from surgery. Which explanation is MOST consistent with dimensional relationships?",
+                    answers: ["Spiritual health directly heals the body", "Purpose and hope reduce stress, supporting physical recovery", "This is coincidence, not causation", "Physical health causes spiritual health"],
+                    correct: 1,
+                    bloom: "Analyze"
+                },
+                {
+                    question: "Taylor has chronic asthma (physical). They manage it well with medication and rarely have symptoms. Taylor says 'I have optimal health.' How should this be evaluated?",
+                    answers: ["Incorrect - chronic conditions mean suboptimal health", "Correct - well-managed conditions allow optimal health", "Incorrect - only disease-free people have optimal health", "Correct - optimal health means no symptoms"],
+                    correct: 1,
+                    bloom: "Analyze"
+                },
+                
+                // Q14-15: EVALUATE/CREATE ($500,000-$1,000,000)
+                {
+                    question: "Two students experience friendship breakups. Alex withdraws and feels depressed for months. Jordan feels sad for weeks then reconnects with other friends. The difference PRIMARILY reflects which dimension?",
+                    answers: ["Mental health - thought patterns differ", "Emotional health - resilience differs", "Social health - friend networks differ", "Spiritual health - coping beliefs differ"],
+                    correct: 1,
+                    bloom: "Evaluate"
+                },
+                {
+                    question: "A workplace program provides meditation rooms (spiritual), gym access (physical), and team social events (social). Why might this be more effective than focusing only on physical health?",
+                    answers: ["It's not more effective - physical health determines all others", "Multiple dimensions interact, so addressing several creates synergistic benefits", "It appears comprehensive but wastes resources on non-physical aspects", "Spiritual and social health don't affect work performance anyway"],
+                    correct: 1,
+                    bloom: "Evaluate"
+                }
+            ],
+
+            currentLevel: 0,
+            money: 0,
+            lifelines: { '5050': true, audience: true, phone: true },
+            currentShuffledAnswers: [],
+            isProcessing: false,
+
+            init: function() {
+                this.loadHighScores();
+                this.switchScreen('start-screen');
+            },
+
+            switchScreen: function(screenId) {
+                document.querySelectorAll('.screen').forEach(s =&gt; s.classList.remove('active-screen'));
+                document.getElementById(screenId).classList.add('active-screen');
+            },
+
+            startGame: function() {
+                this.currentLevel = 0;
+                this.money = 0;
+                this.lifelines = { '5050': true, audience: true, phone: true };
+                this.isProcessing = false;
+                
+                ['5050', 'audience', 'phone'].forEach(ll =&gt; {
+                    document.getElementById(`ll-${ll}`).disabled = false;
+                });
+
+                this.switchScreen('game-screen');
+                this.renderLadder();
+                this.loadQuestion();
+            },
+
+            renderLadder: function() {
+                const ladder = document.getElementById('prize-ladder');
+                ladder.innerHTML = '';
+                
+                for (let i = 14; i &gt;= 0; i--) {
+                    const item = document.createElement('div');
+                    item.className = 'ladder-item';
+                    
+                    if (this.questions[i].milestone) item.classList.add('milestone');
+                    if (i === this.currentLevel) item.classList.add('active');
+                    else if (i &lt; this.currentLevel) item.classList.add('completed');
+                    
+                    item.innerHTML = `&lt;span&gt;${i + 1}&lt;/span&gt;&lt;span&gt;$${this.questions[i].prize.toLocaleString()}&lt;/span&gt;`;
+                    ladder.appendChild(item);
+                }
+            },
+
+            loadQuestion: function() {
+                if (this.currentLevel &gt;= 15) {
+                    this.gameOver(true);
+                    return;
+                }
+
+                const data = this.questionBank[this.currentLevel];
+                
+                document.getElementById('question-number').innerText = `Question ${this.currentLevel + 1} of 15`;
+                document.getElementById('current-money').innerText = this.currentLevel &gt; 0 
+                    ? `$${this.questions[this.currentLevel - 1].prize.toLocaleString()}`
+                    : '$0';
+                document.getElementById('question-text').innerText = data.question;
+                
+                // Shuffle answers
+                let answersWithMeta = data.answers.map((ans, i) =&gt; ({
+                    text: ans,
+                    isCorrect: i === data.correct
+                }));
+
+                for (let i = answersWithMeta.length - 1; i &gt; 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [answersWithMeta[i], answersWithMeta[j]] = [answersWithMeta[j], answersWithMeta[i]];
+                }
+                
+                this.currentShuffledAnswers = answersWithMeta;
+
+                const answersContainer = document.getElementById('answers-container');
+                answersContainer.innerHTML = '';
+
+                const letters = ['A', 'B', 'C', 'D'];
+                this.currentShuffledAnswers.forEach((item, index) =&gt; {
+                    const btn = document.createElement('button');
+                    btn.className = 'answer-btn';
+                    btn.id = `ans-${index}`;
+                    btn.innerHTML = `&lt;span class="answer-prefix"&gt;${letters[index]}:&lt;/span&gt; ${item.text}`;
+                    btn.onclick = () =&gt; this.selectAnswer(index);
+                    answersContainer.appendChild(btn);
+                });
+
+                this.renderLadder();
+            },
+
+            selectAnswer: function(index) {
+                if (this.isProcessing) return;
+                this.isProcessing = true;
+
+                const selectedBtn = document.getElementById(`ans-${index}`);
+                selectedBtn.classList.add('selected');
+
+                setTimeout(() =&gt; {
+                    const chosenAnswer = this.currentShuffledAnswers[index];
+                    const prize = this.questions[this.currentLevel].prize;
+
+                    if (chosenAnswer.isCorrect) {
+                        selectedBtn.classList.remove('selected');
+                        selectedBtn.classList.add('correct');
+                        this.money = prize;
+                        
+                        setTimeout(() =&gt; {
+                            this.currentLevel++;
+                            this.isProcessing = false;
+                            this.loadQuestion();
+                        }, 1500);
+                    } else {
+                        selectedBtn.classList.remove('selected');
+                        selectedBtn.classList.add('wrong');
+                        
+                        const correctBtnIndex = this.currentShuffledAnswers.findIndex(a =&gt; a.isCorrect);
+                        const correctBtn = document.getElementById(`ans-${correctBtnIndex}`);
+                        if(correctBtn) correctBtn.classList.add('correct');
+                        
+                        let lastMilestone = 0;
+                        for (let i = this.currentLevel - 1; i &gt;= 0; i--) {
+                            if (this.questions[i].milestone) {
+                                lastMilestone = this.questions[i].prize;
+                                break;
+                            }
+                        }
+                        this.money = lastMilestone;
+                        
+                        setTimeout(() =&gt; {
+                            this.gameOver(false);
+                        }, 2000);
+                    }
+                }, 2000);
+            },
+
+            useLifeline: function(type) {
+                if (!this.lifelines[type] || this.isProcessing) return;
+                
+                this.lifelines[type] = false;
+                document.getElementById(`ll-${type}`).disabled = true;
+
+                const correctBtnIndex = this.currentShuffledAnswers.findIndex(a =&gt; a.isCorrect);
+
+                if (type === '5050') {
+                    const wrongIndices = [0,1,2,3].filter(i =&gt; i !== correctBtnIndex);
+                    wrongIndices.sort(() =&gt; Math.random() - 0.5);
+                    const btn1 = document.getElementById(`ans-${wrongIndices[0]}`);
+                    const btn2 = document.getElementById(`ans-${wrongIndices[1]}`);
+                    if(btn1) btn1.classList.add('hidden');
+                    if(btn2) btn2.classList.add('hidden');
+                } else if (type === 'audience') {
+                    this.showAudienceModal(correctBtnIndex);
+                } else if (type === 'phone') {
+                    this.showPhoneModal(correctBtnIndex);
+                }
+            },
+
+            showAudienceModal: function(correctIdx) {
+                let percentages = [0,0,0,0];
+                
+                // Audience gets less confident as questions get harder
+                const questionDifficulty = this.currentLevel / 15;
+                const baseConfidence = 75 - (questionDifficulty * 25); // 75% early, 50% late
+                const correctVal = Math.floor(Math.random() * 20) + baseConfidence;
+                percentages[correctIdx] = correctVal;
+                
+                let remaining = 100 - correctVal;
+                for(let i=0; i&lt;4; i++) {
+                    if (i !== correctIdx &amp;&amp; remaining &gt; 0) {
+                        let val = Math.floor(Math.random() * (remaining / 2));
+                        percentages[i] = val;
+                        remaining -= val;
+                    }
+                }
+                
+                percentages[correctIdx] += remaining;
+
+                let html = '&lt;div class="audience-graph"&gt;';
+                ['A','B','C','D'].forEach((l, i) =&gt; {
+                    html += `
+                        &lt;div class="bar-container"&gt;
+                            &lt;div class="bar" style="height: ${percentages[i] * 2}px"&gt;&lt;/div&gt;
+                            &lt;div class="bar-label"&gt;${l}&lt;br&gt;${percentages[i]}%&lt;/div&gt;
+                        &lt;/div&gt;
+                    `;
+                });
+                html += '&lt;/div&gt;';
+
+                this.showModal('Ask the Audience', html);
+            },
+
+            showPhoneModal: function(correctIdx) {
+                // Friend gets less helpful as questions get harder
+                const questionDifficulty = this.currentLevel / 15;
+                const helpfulChance = 0.85 - (questionDifficulty * 0.25); // 85% early, 60% late
+                
+                const isHelpful = Math.random() &lt; helpfulChance;
+                let suggested = correctIdx;
+                
+                if (!isHelpful) {
+                    const wrong = [0,1,2,3].filter(i =&gt; i !== correctIdx);
+                    suggested = wrong[Math.floor(Math.random() * wrong.length)];
+                }
+
+                const letters = ['A','B','C','D'];
+                const confidence = isHelpful ? 
+                    ['pretty sure', 'fairly confident', 'quite certain'][Math.floor(Math.random() * 3)] :
+                    ['I think', 'maybe', 'possibly'][Math.floor(Math.random() * 3)];
+                
+                const text = `I'm ${confidence} the answer is ${letters[suggested]}.`;
+                this.showModal('Phone a Friend', `&lt;p style="font-size:1.2rem; margin:20px 0;"&gt;"${text}"&lt;/p&gt;`);
+            },
+
+            showModal: function(title, content) {
+                document.getElementById('modal-title').innerText = title;
+                document.getElementById('modal-body').innerHTML = content;
+                document.getElementById('modal').style.display = 'flex';
+            },
+
+            gameOver: function(won) {
+                this.isProcessing = false;
+                this.switchScreen('end-screen');
+                const title = won ? "🎉 MILLIONAIRE! 🎉" : "GAME OVER";
+                const msg = `You walked away with $${this.money.toLocaleString()}`;
+                document.getElementById('end-title').innerText = title;
+                document.getElementById('end-message').innerText = msg;
+                document.getElementById('end-title').style.color = won ? 'var(--correct)' : 'var(--wrong)';
+            },
+
+            saveAndExit: function() {
+                const initials = document.getElementById('initials').value.toUpperCase().trim();
+                if (!initials || initials.length !== 3) {
+                    alert("Please enter exactly 3 initials.");
+                    return;
+                }
+                
+                const scores = JSON.parse(localStorage.getItem('section13ScoresV2')) || [];
+                scores.push({ 
+                    initials: initials, 
+                    score: this.money,
+                    date: new Date().toLocaleDateString()
+                });
+                
+                scores.sort((a,b) =&gt; b.score - a.score);
+                const top5 = scores.slice(0, 5);
+                
+                localStorage.setItem('section13ScoresV2', JSON.stringify(top5));
+                this.resetToMenu();
+            },
+
+            resetToMenu: function() {
+                document.getElementById('initials').value = '';
+                this.loadHighScores();
+                this.switchScreen('start-screen');
+            },
+
+            loadHighScores: function() {
+                const container = document.getElementById('high-score-container');
+                const scores = JSON.parse(localStorage.getItem('section13ScoresV2')) || [];
+                
+                if (scores.length === 0) {
+                    container.innerHTML = '&lt;p style="opacity: 0.6;"&gt;No scores yet. Be the first!&lt;/p&gt;';
+                    return;
+                }
+
+                container.innerHTML = '';
+                scores.forEach((s, index) =&gt; {
+                    const row = document.createElement('div');
+                    row.className = 'high-score-item';
+                    const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    row.innerHTML = `&lt;span&gt;${medal} ${s.initials}&lt;/span&gt; &lt;span&gt;$${s.score.toLocaleString()}&lt;/span&gt;`;
+                    container.appendChild(row);
+                });
+            }
+        };
+
+        window.onload = () =&gt; game.init();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
           </div>
         </div>
       </div>
@@ -3801,9 +5602,9 @@ RULES:
         <div class="resource-body">
           <p>Upload or paste any task, question, or worksheet. The Gem produces three versions — scaffolded, standard, and extended — matched to the same learning goal.</p>
           <div class="code-block">
-            <div class="code-block-header">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">Gem system prompt</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body">You are an inclusive education specialist who creates differentiated versions of classroom tasks.
 
@@ -3842,9 +5643,9 @@ RULES:
         <div class="resource-body">
           <p>The complete four-part PICE template. Fill in the brackets, paste it into Gemini or Claude, and iterate from there. Start here for any new tool you want to build.</p>
           <div class="code-block">
-            <div class="code-block-header">
+            <div class="code-block-header" onclick="toggleCodeBlock(this)">
               <span class="code-block-label">PICE template — replace all bracketed text</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <span class="code-block-chevron">▼</span><button class="copy-btn" onclick="event.stopPropagation();copyCode(this)">Copy</button>
             </div>
             <div class="code-block-body"><span class="hi-p">You are [PERSONA — describe the AI's role, voice, and expertise].</span>
 
@@ -3872,6 +5673,12 @@ RULES:
 </footer>
 
 <script>
+// ─── CODE BLOCK TOGGLE ───────────────────────────────────────────────────────
+function toggleCodeBlock(header) {
+  const block = header.closest('.code-block');
+  block.classList.toggle('open');
+}
+
 // ─── TAB NAVIGATION ──────────────────────────────────────────────────────────
 const navTabs = document.querySelectorAll('.nav-tab');
 const tabPages = document.querySelectorAll('.tab-page');
